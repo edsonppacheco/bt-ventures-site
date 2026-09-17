@@ -12,7 +12,7 @@
 <meta name="description" content="BT Ventures — Central Florida real estate development pipeline for institutional and private investors." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Mulish:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Mulish:wght@400;500;600;700;800&family=Hanken+Grotesk:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" />
 
 <style>
   /* ============ TOKENS ============ */
@@ -136,6 +136,9 @@
   .lang button{background:transparent;border:0;color:var(--faint);
     padding:6px 11px;cursor:pointer;font-family:inherit;font-size:inherit;font-weight:500}
   .lang button[aria-pressed="true"]{background:var(--forest);color:#fff}
+  .styleswitch{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;font-family:var(--f-mono);font-size:12px}
+  .styleswitch button{background:transparent;border:0;color:var(--faint);padding:6px 11px;cursor:pointer;font-family:inherit;font-size:inherit;font-weight:500}
+  .styleswitch button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
   .nav-cta{white-space:nowrap}
   @media(max-width:860px){
     .nav-links{display:none}
@@ -438,6 +441,69 @@
   .anim{animation:rise .7s cubic-bezier(.2,.7,.2,1) both}
   .anim.d1{animation-delay:.06s}.anim.d2{animation-delay:.14s}
   .anim.d3{animation-delay:.22s}.anim.d4{animation-delay:.3s}
+
+  /* ============================================================
+     V2 — CLEAN / MODERN SKIN (toggled via [data-style="v2"])
+     Placed last so it overrides the theme token blocks above.
+     ============================================================ */
+  :root[data-style="v2"]{
+    --bg:#FFFFFF; --bg-2:#F4F6F4; --surface:#FFFFFF;
+    --ink:#0E1512; --soft:#57605B; --faint:#8B938D;
+    --line:rgba(14,21,18,.10); --line-2:rgba(14,21,18,.055);
+    --forest:#2E5A47; --forest-press:#243F33; --sage:#5E8574; --mint:#A9C6B7;
+    --shadow:0 1px 3px rgba(14,21,18,.05);
+    --f-disp:"Hanken Grotesk",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    --f-body:"Hanken Grotesk",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  }
+  :root[data-style="v2"] h1,:root[data-style="v2"] h2,
+  :root[data-style="v2"] h3,:root[data-style="v2"] h4{font-weight:600;letter-spacing:-.022em}
+  [data-style="v2"] .eyebrow{font-family:var(--f-body);font-weight:600;letter-spacing:.16em}
+  [data-style="v2"] .section{padding-block:clamp(74px,10vw,148px)}
+
+  /* nav: force dark monogram, hide theme toggle (V2 is a fixed light design) */
+  [data-style="v2"] .brand .lg-light{display:none!important}
+  [data-style="v2"] .brand .lg-dark{display:block!important}
+  [data-style="v2"] .tt{display:none}
+
+  /* recolor the dark bands to light by remapping the constant dark tokens */
+  [data-style="v2"] .hero,
+  [data-style="v2"] .trust,
+  [data-style="v2"] .map,
+  [data-style="v2"] .contact{
+    --d-bg:#FFFFFF; --d-bg-2:#F4F6F4; --d-panel:#EEF1EE;
+    --d-ink:#0E1512; --d-soft:#57605B; --d-line:rgba(14,21,18,.10);
+    --d-forest:#2E5A47; --d-mint:#2E5A47;
+  }
+  [data-style="v2"] .hero{background:var(--bg-2)}
+  [data-style="v2"] .hero-photo,[data-style="v2"] .hero-overlay{display:none}
+  [data-style="v2"] .hero h1{color:var(--d-ink)}
+  [data-style="v2"] .hero h1 em{font-style:italic}
+  [data-style="v2"] .hstat .n{color:var(--d-ink)}
+  [data-style="v2"] .hstat .l{font-family:var(--f-body);font-weight:600}
+
+  [data-style="v2"] .trust{background:var(--bg);border-bottom:1px solid var(--line)}
+  [data-style="v2"] .trust-in{font-family:var(--f-body)}
+
+  [data-style="v2"] .map{background:var(--bg)}
+  [data-style="v2"] .map-copy h2{color:var(--d-ink)}
+  [data-style="v2"] .map-legend{font-family:var(--f-body)}
+  /* keep the framed map + BT pins dark, regardless of the light section */
+  [data-style="v2"] .map-frame{
+    --d-bg:#141B18; --d-bg-2:#1B2521; --d-ink:#F3F1EA; --d-soft:#A9B4AD;
+    --d-line:rgba(255,255,255,.14); --d-forest:#7CA894; --d-mint:#AFCBBB;
+  }
+
+  [data-style="v2"] .contact{background:var(--bg-2)}
+  [data-style="v2"] .contact h2{color:var(--d-ink)}
+
+  /* buttons on the now-light bands */
+  [data-style="v2"] .btn--light{color:#fff}
+  [data-style="v2"] .btn--light:hover{background:var(--forest-press)}
+
+  /* flatten: modern, minimal, hairline */
+  [data-style="v2"] .card,[data-style="v2"] .acard,[data-style="v2"] .rec,
+  [data-style="v2"] .person,[data-style="v2"] .flagship,[data-style="v2"] .tbl-scroll{box-shadow:none}
+  [data-style="v2"] .card:hover,[data-style="v2"] .acard:hover{box-shadow:var(--shadow)}
 </style>
 </head>
 <body>
@@ -458,6 +524,10 @@
       <a href="#leadership"><span data-lang="en">Leadership</span><span data-lang="pt">Liderança</span></a>
     </nav>
     <div class="nav-tools">
+      <div class="styleswitch" role="group" aria-label="Design version" title="Versão de design">
+        <button type="button" data-set-style="v1" aria-pressed="true">V1</button>
+        <button type="button" data-set-style="v2" aria-pressed="false">V2</button>
+      </div>
       <div class="lang" role="group" aria-label="Language">
         <button type="button" data-set-lang="en" aria-pressed="true">EN</button>
         <button type="button" data-set-lang="pt" aria-pressed="false">PT</button>
@@ -938,6 +1008,21 @@
     var isDark = cur ? cur==="dark" : sysDark;
     setTheme(isDark ? "light":"dark");
   });
+
+  /* ---------- design version toggle (V1 / V2) ---------- */
+  var STORE_S="bt_style";
+  function setStyle(s){
+    s = (s==="v2") ? "v2" : "v1";
+    if(s==="v2") root.setAttribute("data-style","v2"); else root.removeAttribute("data-style");
+    document.querySelectorAll("[data-set-style]").forEach(function(b){
+      b.setAttribute("aria-pressed", b.getAttribute("data-set-style")===s ? "true":"false");
+    });
+    writeLS(STORE_S,s);
+  }
+  document.querySelectorAll("[data-set-style]").forEach(function(b){
+    b.addEventListener("click",function(){ setStyle(b.getAttribute("data-set-style")); });
+  });
+  setStyle(readLS(STORE_S)||"v1");
 
   /* ---------- pipeline table ---------- */
   var rows=[
