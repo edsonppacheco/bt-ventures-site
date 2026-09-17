@@ -161,7 +161,7 @@
   .hero{position:relative;background:var(--d-bg);color:var(--d-ink);overflow:hidden}
   .hero-grid-bg{position:absolute;inset:0;opacity:.5;pointer-events:none}
   .hero-in{position:relative;padding-block:clamp(72px,12vw,140px)}
-  .hero-figure{display:none}
+  .hero-photo--v2{display:none}
   .hero h1{font-size:clamp(40px,7vw,84px);font-weight:400;letter-spacing:-.02em;
     max-width:15ch;color:#fff}
   .hero h1 em{font-style:italic;color:var(--d-mint);font-weight:400}
@@ -467,7 +467,6 @@
   [data-style="v2"] .tt{display:none}
 
   /* recolor the dark bands to light by remapping the constant dark tokens */
-  [data-style="v2"] .hero,
   [data-style="v2"] .trust,
   [data-style="v2"] .map,
   [data-style="v2"] .contact{
@@ -475,22 +474,14 @@
     --d-ink:#0D1B2E; --d-soft:#53617A; --d-line:rgba(13,27,46,.11);
     --d-forest:#2C5BE6; --d-mint:#2C5BE6;
   }
-  [data-style="v2"] .hero{background:linear-gradient(180deg,#F1F5FB,#FFFFFF)}
-  [data-style="v2"] .hero-photo,[data-style="v2"] .hero-overlay{display:none}
-  [data-style="v2"] .hero h1{color:var(--d-ink)}
-  [data-style="v2"] .hero h1 em{font-style:italic}
-  [data-style="v2"] .hstat .n{color:var(--d-ink)}
+  /* V2 hero: full-bleed image integrated into the section (blue tint, white text) */
+  [data-style="v2"] .hero{--d-forest:#4E86FF; --d-mint:#8FB4FF}
+  [data-style="v2"] .hero-photo{display:none}
+  [data-style="v2"] .hero-photo--v2{display:block;opacity:1}
+  [data-style="v2"] .hero-overlay{display:block;background:
+    linear-gradient(90deg,rgba(9,17,36,.88),rgba(9,17,36,.52) 46%,rgba(9,17,36,.12) 78%),
+    linear-gradient(180deg,rgba(9,17,36,0) 50%,rgba(9,17,36,.92) 100%)}
   [data-style="v2"] .hstat .l{font-family:var(--f-body);font-weight:600}
-  /* V2 split hero with image */
-  [data-style="v2"] .hero-in{display:grid;grid-template-columns:1.06fr .94fr;gap:clamp(28px,5vw,64px);align-items:center}
-  [data-style="v2"] .hero-figure{display:block}
-  [data-style="v2"] .hero-figure img{width:100%;aspect-ratio:5/4;object-fit:cover;border-radius:20px;
-    box-shadow:0 34px 70px -34px rgba(13,27,46,.45)}
-  @media(max-width:820px){
-    [data-style="v2"] .hero-in{grid-template-columns:1fr}
-    [data-style="v2"] .hero-figure{margin-top:8px}
-    [data-style="v2"] .hero-figure img{aspect-ratio:16/10}
-  }
 
   [data-style="v2"] .trust{background:var(--bg);border-bottom:1px solid var(--line)}
   [data-style="v2"] .trust-in{font-family:var(--f-body)}
@@ -558,6 +549,7 @@
   <!-- ================= HERO ================= -->
   <section class="hero">
     <img class="hero-photo" src="img/hero.jpg" alt="" aria-hidden="true" />
+    <img class="hero-photo hero-photo--v2" src="img/siesta.jpg" alt="" aria-hidden="true" />
     <div class="hero-overlay" aria-hidden="true"></div>
     <svg class="hero-grid-bg" preserveAspectRatio="xMidYMid slice" viewBox="0 0 1200 700" aria-hidden="true">
       <defs>
@@ -592,7 +584,6 @@
         </a>
       </div>
       </div>
-      <div class="hero-figure anim d2"><img src="img/siesta.jpg" alt="BT Ventures development in Central Florida" /></div>
     </div>
     <div class="wrap"><div class="hero-stats anim d4" id="heroStats">
       <div class="hstat"><div class="n"><span class="u">$</span><span class="cnt" data-to="362.5" data-dec="1">0</span><span class="u">M+</span></div>
