@@ -352,11 +352,11 @@
     font-size:12px;color:var(--d-soft);opacity:.8;line-height:1.5;font-family:var(--f-mono);letter-spacing:.02em}
 
   /* ============ PHOTOS ============ */
-  .hero-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-    opacity:.34;filter:saturate(1.05)}
+  .hero-cad{position:absolute;inset:0;width:100%;height:100%;display:block;
+    filter:drop-shadow(0 0 6px rgba(77,255,166,.4));opacity:.96}
   .hero-overlay{position:absolute;inset:0;pointer-events:none;background:
-    linear-gradient(180deg,rgba(18,24,21,.62) 0%,rgba(18,24,21,.82) 55%,var(--d-bg) 100%),
-    linear-gradient(90deg,rgba(18,24,21,.55),rgba(18,24,21,0) 60%)}
+    linear-gradient(90deg,rgba(18,24,21,.93) 0%,rgba(18,24,21,.6) 40%,rgba(18,24,21,.06) 74%),
+    linear-gradient(180deg,rgba(18,24,21,0) 42%,var(--d-bg) 100%)}
 
   .flagship-art{padding:0;overflow:hidden}
   .flagship-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
@@ -423,21 +423,8 @@
 <main id="top">
   <!-- ================= HERO ================= -->
   <section class="hero">
-    <img class="hero-photo" src="img/siesta.jpg" alt="" aria-hidden="true" />
+    <canvas class="hero-cad" id="heroCad" aria-hidden="true"></canvas>
     <div class="hero-overlay" aria-hidden="true"></div>
-    <svg class="hero-grid-bg" preserveAspectRatio="xMidYMid slice" viewBox="0 0 1200 700" aria-hidden="true">
-      <defs>
-        <pattern id="plat" width="56" height="56" patternUnits="userSpaceOnUse">
-          <path d="M56 0H0V56" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
-        </pattern>
-        <radialGradient id="glow" cx="72%" cy="30%" r="60%">
-          <stop offset="0%" stop-color="#33574A" stop-opacity=".38"/>
-          <stop offset="100%" stop-color="#33574A" stop-opacity="0"/>
-        </radialGradient>
-      </defs>
-      <rect width="1200" height="700" fill="url(#plat)"/>
-      <rect width="1200" height="700" fill="url(#glow)"/>
-    </svg>
     <div class="wrap hero-in">
       <div class="hero-badge anim"><span class="dot"></span>
         <span data-lang="en">Central Florida · Real Estate Development</span>
@@ -876,6 +863,119 @@
   </div>
 </footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* ===== Hero: wireframe CAD house (laser green) ===== */
+(function(){
+  var canvas=document.getElementById('heroCad');
+  if(!canvas || !window.THREE){ return; }
+  var THREE=window.THREE;
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+  var renderer;
+  try{ renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true,alpha:true}); }
+  catch(e){ return; }
+  renderer.setClearColor(0x000000,0);
+
+  var scene=new THREE.Scene();
+  var camera=new THREE.PerspectiveCamera(38,1,0.1,100);
+  camera.position.set(4.7,3.35,6.6);
+  var lookX=0.9;
+
+  var group=new THREE.Group(); group.position.x=lookX; scene.add(group);
+
+  var GREEN=0x4dffa6;
+
+  var grid=new THREE.GridHelper(26,26,0x33a06e,0x1b5a3d);
+  grid.material.transparent=true; grid.material.opacity=0.32; scene.add(grid);
+
+  var hw=1.5,hd=1.1,wh=1.6,rh=2.72,z=hd;
+  function P(x,y,zz){return [x,y,zz];}
+  var A=P(-hw,0,-hd),B=P(hw,0,-hd),C=P(hw,0,hd),D=P(-hw,0,hd);
+  var E=P(-hw,wh,-hd),F=P(hw,wh,-hd),G=P(hw,wh,hd),H=P(-hw,wh,hd);
+  var Pf=P(0,rh,hd),Pb=P(0,rh,-hd);
+  var edges=[
+    A,B, B,C, C,D, D,A,            // footprint
+    A,E, B,F, C,G, D,H,            // verticals
+    E,F, F,G, G,H, H,E,            // eaves
+    G,Pf, H,Pf, E,Pb, F,Pb, Pf,Pb // roof + ridge
+  ];
+  // front door
+  edges.push(P(-0.32,0,z),P(0.32,0,z), P(0.32,0,z),P(0.32,1.02,z), P(0.32,1.02,z),P(-0.32,1.02,z), P(-0.32,1.02,z),P(-0.32,0,z));
+  // front windows beside door
+  function rectZ(x0,x1,y0,y1){ edges.push(P(x0,y0,z),P(x1,y0,z), P(x1,y0,z),P(x1,y1,z), P(x1,y1,z),P(x0,y1,z), P(x0,y1,z),P(x0,y0,z)); }
+  rectZ(0.7,1.12,0.55,1.15); rectZ(-1.12,-0.7,0.55,1.15);
+  // side wall windows (x = +/- hw)
+  function rectX(x,z0,z1,y0,y1){ edges.push(P(x,y0,z0),P(x,y0,z1), P(x,y0,z1),P(x,y1,z1), P(x,y1,z1),P(x,y1,z0), P(x,y1,z0),P(x,y0,z0)); }
+  rectX(hw,-0.6,-0.1,0.55,1.15); rectX(hw,0.1,0.6,0.55,1.15);
+  rectX(-hw,-0.25,0.25,0.55,1.15);
+
+  var pos=new Float32Array(edges.length*3);
+  for(var i=0;i<edges.length;i++){ pos[i*3]=edges[i][0]; pos[i*3+1]=edges[i][1]; pos[i*3+2]=edges[i][2]; }
+  var geo=new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(pos,3));
+  var mat=new THREE.LineBasicMaterial({color:GREEN,transparent:true,opacity:0.95,blending:THREE.AdditiveBlending});
+  var house=new THREE.LineSegments(geo,mat); group.add(house);
+  var totalVerts=edges.length;
+
+  // scanning footprint loop
+  var sc=hw+0.4, sd=hd+0.4;
+  var sgeo=new THREE.BufferGeometry();
+  sgeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array([-sc,0,-sd, sc,0,-sd, sc,0,sd, -sc,0,sd, -sc,0,-sd]),3));
+  var smat=new THREE.LineBasicMaterial({color:0xbfffe0,transparent:true,opacity:0.85,blending:THREE.AdditiveBlending});
+  var scan=new THREE.Line(sgeo,smat); group.add(scan);
+
+  function resize(){
+    var w=canvas.clientWidth, h=canvas.clientHeight;
+    if(!w||!h) return;
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+    renderer.setSize(w,h,false);
+    camera.aspect=w/h; camera.updateProjectionMatrix();
+  }
+  window.addEventListener('resize',resize); resize();
+
+  camera.lookAt(lookX,1.15,0);
+
+  if(reduce){
+    geo.setDrawRange(0,totalVerts); group.rotation.y=-0.5; scan.visible=false;
+    renderer.render(scene,camera); return;
+  }
+
+  var start=performance.now(), running=true;
+  function easeOut(p){ return 1-Math.pow(1-p,3); }
+  function frame(now){
+    if(!running) return;
+    var t=now-start;
+    var p=Math.min(t/2600,1);
+    var count=Math.max(2, Math.floor(totalVerts*easeOut(p)/2)*2);
+    geo.setDrawRange(0,count);
+    group.rotation.y = -0.4 + t*0.00013;
+    var sp=Math.sin(t*0.0015)*0.5+0.5;
+    scan.position.y = sp*(rh-0.08);
+    scan.material.opacity = 0.3 + 0.55*(1-Math.abs(sp-0.5)*1.6);
+    scan.visible = t>1100;
+    camera.position.y = 3.35 + Math.sin(t*0.0006)*0.25;
+    camera.lookAt(lookX,1.15,0);
+    renderer.render(scene,camera);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  document.addEventListener('visibilitychange',function(){
+    if(document.hidden){ running=false; }
+    else if(!running){ running=true; requestAnimationFrame(frame); }
+  });
+  try{
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if(e.isIntersecting){ if(!running){ running=true; requestAnimationFrame(frame); } }
+        else { running=false; }
+      });
+    },{threshold:0});
+    io.observe(canvas);
+  }catch(e){}
+})();
+</script>
 <script>
 (function(){
   "use strict";
