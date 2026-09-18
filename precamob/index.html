@@ -237,6 +237,31 @@
     }
     .hero-disclaimer svg { flex-shrink: 0; }
 
+    /* Parceria (co-branding) */
+    .hero-partners {
+      margin-top: 44px; padding-top: 32px; border-top: 1px solid var(--border);
+    }
+    .partners-label {
+      display: block; font-size: 12px; font-weight: 600; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--text-dim); margin-bottom: 22px;
+    }
+    .partners-row { display: flex; align-items: flex-start; gap: 32px; flex-wrap: wrap; }
+    .partner { display: flex; flex-direction: column; gap: 12px; max-width: 290px; }
+    .partner-logo-wrap { height: 44px; display: flex; align-items: center; }
+    .partner-logo { width: auto; display: block; }
+    .partner-logo.droom { height: 26px; }
+    .partner-logo.bt { height: 44px; }
+    .partner-desc { font-size: 13.5px; color: var(--text-muted); line-height: 1.5; }
+    .partner-sep {
+      align-self: flex-start; height: 44px; display: flex; align-items: center;
+      color: var(--text-dim); font-size: 22px; font-weight: 300;
+    }
+    @media (max-width: 620px) {
+      .partners-row { gap: 24px; }
+      .partner { max-width: 100%; }
+      .partner-sep { display: none; }
+    }
+
     /* Hero metric strip */
     .hero-strip {
       position: relative; z-index: 1;
@@ -556,6 +581,21 @@
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
           Retorno alvo e projetado. Não constitui garantia de rentabilidade.
         </p>
+
+        <div class="hero-partners">
+          <span class="partners-label">Uma parceria entre</span>
+          <div class="partners-row">
+            <div class="partner">
+              <div class="partner-logo-wrap"><img class="partner-logo droom" src="logo-droom.png" alt="droom" /></div>
+              <span class="partner-desc">Líder em investimentos indexados em precatórios e tokenização.</span>
+            </div>
+            <span class="partner-sep" aria-hidden="true">×</span>
+            <div class="partner">
+              <div class="partner-logo-wrap"><img class="partner-logo bt" src="logo-bt.png" alt="BT Ventures" /></div>
+              <span class="partner-desc">Uma das empresas mais relevantes do real estate da Flórida — 45 anos de atuação.</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="hero-strip reveal">
