@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-style="v2">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <link rel="icon" type="image/png" href="favicon-bt.png" />
-<meta name="theme-color" content="#141B18" />
+<meta name="theme-color" content="#081326" />
 <meta property="og:title" content="BT Ventures — Central Florida Development Pipeline" />
 <meta property="og:description" content="A $362.5M+ real estate development pipeline across Central Florida, built for institutional and private investors." />
 <meta property="og:type" content="website" />
@@ -136,9 +136,6 @@
   .lang button{background:transparent;border:0;color:var(--faint);
     padding:6px 11px;cursor:pointer;font-family:inherit;font-size:inherit;font-weight:500}
   .lang button[aria-pressed="true"]{background:var(--forest);color:#fff}
-  .styleswitch{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;font-family:var(--f-mono);font-size:12px}
-  .styleswitch button{background:transparent;border:0;color:var(--faint);padding:6px 11px;cursor:pointer;font-family:inherit;font-size:inherit;font-weight:500}
-  .styleswitch button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
   .nav-cta{white-space:nowrap}
   @media(max-width:860px){
     .nav-links{display:none}
@@ -161,7 +158,7 @@
   .hero{position:relative;background:var(--d-bg);color:var(--d-ink);overflow:hidden}
   .hero-grid-bg{position:absolute;inset:0;opacity:.5;pointer-events:none}
   .hero-in{position:relative;padding-block:clamp(72px,12vw,140px)}
-  .hero-photo--v2{display:none}
+  .hero-media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;background:#0A1526}
   .hero h1{font-size:clamp(40px,7vw,84px);font-weight:400;letter-spacing:-.02em;
     max-width:15ch;color:#fff}
   .hero h1 em{font-style:italic;color:var(--d-mint);font-weight:400}
@@ -475,9 +472,7 @@
     --d-forest:#2C5BE6; --d-mint:#2C5BE6;
   }
   /* V2 hero: full-bleed image integrated into the section (blue tint, white text) */
-  [data-style="v2"] .hero{--d-forest:#4E86FF; --d-mint:#8FB4FF}
-  [data-style="v2"] .hero-photo{display:none}
-  [data-style="v2"] .hero-photo--v2{display:block;opacity:1}
+  [data-style="v2"] .hero{background:#0A1526; --d-forest:#4E86FF; --d-mint:#8FB4FF}
   [data-style="v2"] .hero-overlay{display:block;background:
     linear-gradient(90deg,rgba(9,17,36,.88),rgba(9,17,36,.52) 46%,rgba(9,17,36,.12) 78%),
     linear-gradient(180deg,rgba(9,17,36,0) 50%,rgba(9,17,36,.92) 100%)}
@@ -506,11 +501,18 @@
   [data-style="v2"] .card,[data-style="v2"] .acard,[data-style="v2"] .rec,
   [data-style="v2"] .person,[data-style="v2"] .flagship,[data-style="v2"] .tbl-scroll{box-shadow:none}
   [data-style="v2"] .card:hover,[data-style="v2"] .acard:hover{box-shadow:var(--shadow)}
+
+  /* V2 footer: deep navy blue (no green tint) */
+  [data-style="v2"] footer.ft{
+    --d-bg-2:#081326; --d-line:rgba(255,255,255,.10); --d-soft:#93A1B8; --d-mint:#8FB4FF;
+    background:#081326; border-top-color:rgba(255,255,255,.10);
+  }
 </style>
 </head>
 <body>
 
 
+<script>document.documentElement.setAttribute('data-style','v2');</script>
 <!-- ================= NAV ================= -->
 <header class="nav">
   <div class="wrap nav-in">
@@ -526,10 +528,6 @@
       <a href="#leadership"><span data-lang="en">Leadership</span><span data-lang="pt">Liderança</span></a>
     </nav>
     <div class="nav-tools">
-      <div class="styleswitch" role="group" aria-label="Design version" title="Versão de design">
-        <button type="button" data-set-style="v1" aria-pressed="true">V1</button>
-        <button type="button" data-set-style="v2" aria-pressed="false">V2</button>
-      </div>
       <div class="lang" role="group" aria-label="Language">
         <button type="button" data-set-lang="en" aria-pressed="true">EN</button>
         <button type="button" data-set-lang="pt" aria-pressed="false">PT</button>
@@ -548,8 +546,9 @@
 <main id="top">
   <!-- ================= HERO ================= -->
   <section class="hero">
-    <img class="hero-photo" src="img/hero.jpg" alt="" aria-hidden="true" />
-    <img class="hero-photo hero-photo--v2" src="img/siesta.jpg" alt="" aria-hidden="true" />
+    <video class="hero-media" autoplay muted loop playsinline preload="auto" aria-hidden="true">
+      <source src="bt-hero.mp4" type="video/mp4" />
+    </video>
     <div class="hero-overlay" aria-hidden="true"></div>
     <svg class="hero-grid-bg" preserveAspectRatio="xMidYMid slice" viewBox="0 0 1200 700" aria-hidden="true">
       <defs>
@@ -1014,20 +1013,21 @@
     setTheme(isDark ? "light":"dark");
   });
 
-  /* ---------- design version toggle (V1 / V2) ---------- */
-  var STORE_S="bt_style";
-  function setStyle(s){
-    s = (s==="v2") ? "v2" : "v1";
-    if(s==="v2") root.setAttribute("data-style","v2"); else root.removeAttribute("data-style");
-    document.querySelectorAll("[data-set-style]").forEach(function(b){
-      b.setAttribute("aria-pressed", b.getAttribute("data-set-style")===s ? "true":"false");
-    });
-    writeLS(STORE_S,s);
-  }
-  document.querySelectorAll("[data-set-style]").forEach(function(b){
-    b.addEventListener("click",function(){ setStyle(b.getAttribute("data-set-style")); });
-  });
-  setStyle(readLS(STORE_S)||"v1");
+  /* single design (clean/modern) */
+  root.setAttribute("data-style","v2");
+
+  /* hero video: reliable muted autoplay + loop (respects reduced motion) */
+  (function(){
+    var v=document.querySelector('.hero-media');
+    if(!v) return;
+    if(window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches){
+      try{ v.removeAttribute('autoplay'); v.pause(); }catch(e){} return;
+    }
+    function tryPlay(){ var p=v.play(); if(p && p.catch) p.catch(function(){}); }
+    tryPlay();
+    v.addEventListener('canplay', tryPlay, {once:true});
+    document.addEventListener('visibilitychange', function(){ if(!document.hidden) tryPlay(); });
+  })();
 
   /* ---------- pipeline table ---------- */
   var rows=[
