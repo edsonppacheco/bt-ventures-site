@@ -546,9 +546,7 @@
 <main id="top">
   <!-- ================= HERO ================= -->
   <section class="hero">
-    <video class="hero-media" autoplay muted loop playsinline preload="auto" aria-hidden="true">
-      <source src="bt-hero.mp4" type="video/mp4" />
-    </video>
+    <img class="hero-media" src="img/hero-photo.jpg" alt="" aria-hidden="true" />
     <div class="hero-overlay" aria-hidden="true"></div>
     <svg class="hero-grid-bg" preserveAspectRatio="xMidYMid slice" viewBox="0 0 1200 700" aria-hidden="true">
       <defs>
@@ -1015,19 +1013,6 @@
 
   /* single design (clean/modern) */
   root.setAttribute("data-style","v2");
-
-  /* hero video: reliable muted autoplay + loop (respects reduced motion) */
-  (function(){
-    var v=document.querySelector('.hero-media');
-    if(!v) return;
-    if(window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches){
-      try{ v.removeAttribute('autoplay'); v.pause(); }catch(e){} return;
-    }
-    function tryPlay(){ var p=v.play(); if(p && p.catch) p.catch(function(){}); }
-    tryPlay();
-    v.addEventListener('canplay', tryPlay, {once:true});
-    document.addEventListener('visibilitychange', function(){ if(!document.hidden) tryPlay(); });
-  })();
 
   /* ---------- pipeline table ---------- */
   var rows=[
