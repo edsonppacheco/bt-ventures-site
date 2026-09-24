@@ -1,11 +1,12 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
-  "rewrites": [
+  "redirects": [
     {
       "source": "/",
       "has": [{ "type": "host", "value": "precamob.mybtventures.com" }],
-      "destination": "/precamob"
+      "destination": "/precamob",
+      "permanent": false
     }
   ],
   "headers": [
